@@ -78,11 +78,10 @@ function getAsignaturaCodigo (codigo){
             }
         })
         .then(()=>{
-            console.log(asignatura)
             return asignatura
         })
 }
-exports.getAsignatura
+exports.getAsignaturaCodigo
 
 exports.getAsignatura = function(req,res,next){
     return getAsignaturaCodigo(req.params.asignatura)

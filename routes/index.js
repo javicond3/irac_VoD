@@ -5,6 +5,7 @@ let Sequelize = require('sequelize');
 let models = require('../models');
 let asignaturaController = require('../controllers/asignatura_controller')
 let comentarioController = require('../controllers/comentario_controller')
+let videoController = require('../controllers/video_controller')
 
 router.all('*', function(req,res,next){
   res.locals.asignaturaPath = "" + req.baseUrl
@@ -26,9 +27,12 @@ router.get('/', function (req, res) {
     });
 });
 router.get('/:asignatura', asignaturaController.getAsignatura)
-router.get('/video/:video')
+router.get('/video/:video', videoController.getVideo)
 router.post('/:asignatura/comentario', comentarioController.setComentario, function(req,res){
   res.redirect(res.locals.asignaturaPath + "/" + req.params.asignatura)
+})
+router.post('/video/:video/comentario', comentarioController.setComentario, function (req, res) {
+  res.redirect(res.locals.videoPath + "/" + req.params.video)
 })
 
 
