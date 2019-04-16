@@ -1,0 +1,72 @@
+<%
+let asign = asignaturas.find(function (obj) { return obj.codigo === asignatura.codigo});
+if(!asign.acronimo)asign.acronimo=asign.nombre
+%>
+
+<div class="content">
+    <h2><%=asign.acronimo%></h2>
+    <h3 class="p_hr">Información</h3>
+    <hr>
+    <table class="table">
+        <tbody>
+            <tr>
+            <th scope="row" class="noBorde">Nombre</th>
+            <td class="noBorde"><%=asign.nombre%></td>
+            </tr>
+            <tr>
+            <th scope="row" class="noBorde">Código</th>
+            <td class="noBorde"><%=asign.codigo%></td>
+            </tr>
+            <tr>
+            <th scope="row" class="noBorde">Curso</th>
+            <td class="noBorde"><%=asign.curso%>º</td>
+            </tr>
+            <tr>
+            <th scope="row" class="noBorde">Semestre</th>
+            <td class="noBorde"><%=asign.semestre%></td>
+            </tr>
+            <tr>
+            <th scope="row" class="noBorde">Créditos</th>
+            <td class="noBorde"><%=asign.creditos%></td>
+            </tr>
+            <tr>
+            <th scope="row" class="noBorde">Vídeos disponibles</th>
+            <td class="noBorde"><%=asignatura.videos.length%></td>
+            </tr>
+        </tbody>
+    </table>
+    <h3 class="p_hr">Vídeos</h3>
+    <hr>
+    <div class="container text-center">    
+    <div class="row">
+        <%asignatura.videos.forEach(function(video,index){%>
+            <div class="col-sm-4">
+            <a href="<%=videoPath%>/<%=video.identificador%>">
+            <img src="<%=contextPath%>/images/videos/<%=video.urlImagen%>"  class="img-responsive img-thumbnail" style="width:100%; height:150px" alt="Image">
+            </a>
+            <p><%=video.titulo%> <span style="color:red; float:right" class="text-right glyphicon glyphicon-thumbs-down"><%=video.dislikes%></span><span style="color:green; float:right" class="glyphicon glyphicon-thumbs-up"><%=video.likes%></span></p>
+            </div>
+        <%})%>
+    </div>
+    </div><br>
+    <h3 class="p_hr">Comentarios</h3>
+    <hr>
+    <div class="comentario rounded" style="padding:10px">
+        <form action="<%=formPath%>" method="post">
+        <input type="text" class="form-control"  name="texto"  placeholder="Escribir comentario">
+        <button type="submit" class="btn btn-dark">Comentar</button>
+        </form>
+    </div>
+    <br>
+    <%asignatura.comentarios.forEach(function(coment,index){%>
+            <div class="comentario rounded">
+            <p><b><%=coment.nombre%></b><em style="float:right"><%=coment.fecha%></em></p>
+            <p style="padding-left: 20px; padding-right: 20px"><%=coment.texto%>
+            <span style="color:green;" class="glyphicon glyphicon-thumbs-up"><%=coment.likes%></span>
+            <span style="color:red" class="glyphicon glyphicon-thumbs-down"><%=coment.dislikes%></span>
+            </p>
+            </div>
+            <br>
+        <%})%>
+    <br>
+</div>
