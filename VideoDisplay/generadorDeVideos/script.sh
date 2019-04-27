@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd ../../public/videos
 if [ -z "$(which ffmpeg)" ]; then
     echo "Error: ffmpeg no esta instalado"
     exit 1

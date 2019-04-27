@@ -26,6 +26,8 @@ router.get('/', function (req, res) {
       contextPath: app.contextPath
     });
 });
+
+router.get('/convertir', videoController.convertVideo)
 router.get('/:asignatura', asignaturaController.getAsignatura)
 router.get('/video/:video', videoController.getVideo)
 router.post('/:asignatura/comentario', comentarioController.setComentario, function(req,res){
@@ -34,6 +36,9 @@ router.post('/:asignatura/comentario', comentarioController.setComentario, funct
 router.post('/video/:video/comentario', comentarioController.setComentario, function (req, res) {
   res.redirect(res.locals.videoPath + "/" + req.params.video)
 })
+
+router.post('/subirVideo/:asignatura', app.upload.array('file', 2), videoController.convertVideo)
+
 
 
 module.exports = router;

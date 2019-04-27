@@ -5,6 +5,7 @@ let path = require('path');
 let cookieParser = require('cookie-parser');
 let partials = require('express-partials');
 let morgan = require('morgan'); 
+let shell = require('shelljs');
 let funciones = require('./funciones')
 
 //context path para la aplicacion en el servidor
@@ -14,11 +15,27 @@ const contextPath = normalize(process.env.CONTEXT);
 exports.contextPath = contextPath;
 const local = process.env.DEV;
 exports.local = local;
+let multer = require('multer')
 //cas autentication
 let CASAuthentication = require('cas-authentication');
 // Create a new instance of CASAuthentication.
 let service = process.env.SERVICE;
 let cas_url = process.env.CAS;
+
+//configuracion de subir videos al servidor e imágenes
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/videos')
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.body.titulo + "." + file.originalname.split('.').pop())
+  }
+})
+
+let upload = multer({ storage: storage })
+
+exports.storage = storage;
+exports.upload = upload;
 
 let cas = new CASAuthentication({
   cas_url: cas_url,
@@ -33,6 +50,10 @@ let cas = new CASAuthentication({
 
 //instanciacion 
 let app = express();
+
+//doy permisos de ejecucion
+shell.chmod(777, './VideoDisplay/generadorDeVideos/script.sh');
+
 //rutas requeridas
 let router = require('./routes/index')
 let models = require('./models');

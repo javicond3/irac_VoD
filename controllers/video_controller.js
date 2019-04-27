@@ -2,6 +2,7 @@ let app = require('../app');
 let models = require('../models');
 let Sequelize = require('sequelize');
 let funciones = require('../funciones')
+let shell = require('shelljs');
 const op = Sequelize.Op;
 
 function getVideoIdentificador(identificador) {
@@ -23,7 +24,7 @@ function getVideoIdentificador(identificador) {
             }]
         }],
         order: [
-            [Sequelize.literal('"Comentarios"."identificador"'), 'DESC']
+            [Sequelize.literal('"Comentarios"."identificador"'), 'ASC']
         ],
         raw: true
     })
@@ -35,6 +36,7 @@ function getVideoIdentificador(identificador) {
                 video.resumen = respuesta.resumen
                 video.urlImagen = respuesta.urlImagen
                 video.urlVideo = respuesta.urlVideo
+                if (video.urlVideo) video.urlVideo.split('.').slice(0, -1).join('.')+".mpd"
                 video.likes = respuesta.likes
                 video.dislikes = respuesta.dislikes
                 video.comentarios = []
@@ -49,6 +51,7 @@ function getVideoIdentificador(identificador) {
                 c.fecha = respuesta['Comentarios.fecha']
                 video.comentarios.push(c)
             }
+            
         })
         .then(() => {
             return video
@@ -68,4 +71,29 @@ exports.getVideo = function (req, res, next) {
             console.log("Error:", error);
             next(error);
         });
+}
+
+exports.convertVideo = function (req, res, next) {
+    shell.exec('./VideoDisplay/generadorDeVideos/script.sh ./public/videos/'+req.body.titulo+".mp4", function (code, stdout, stderr) {
+        if(code)console.log('Exit code:', code);
+        if(stdout)console.log('Program output:', stdout);
+        if(stderr)console.log('Program stderr:', stderr);
+        let video = {};
+        video.likes = 0;
+        video.dislikes = 0;
+        video.titulo = req.body.titulo;
+        video.duracion = 0;
+        video.resumen = req.body.resumen;
+        video["urlImagen"] = req.body.titulo+".jpg";
+        video["urlVideo"] = req.body.titulo+".mp4";
+        video["AsignaturaCodigo"] = req.params.asignatura;
+        let videoToAnadir = models.Video.build(
+            video
+        )
+        return videoToAnadir.save()
+            .catch(function (error) {
+                console.log("Error:", error);
+            });
+    });
+    res.redirect(app.contextPath + "/" + req.params.asignatura + "?subir=Si")
 }

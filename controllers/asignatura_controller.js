@@ -61,7 +61,7 @@ function getAsignaturaCodigo (codigo){
                     }]
                 }],
                 order: [
-                [Sequelize.literal('"Comentarios"."identificador"'), 'DESC']
+                [Sequelize.literal('"Comentarios"."identificador"'), 'ASC']
                 ],
                 raw: true
             })
@@ -84,13 +84,16 @@ function getAsignaturaCodigo (codigo){
 exports.getAsignaturaCodigo
 
 exports.getAsignatura = function(req,res,next){
+    let subir = req.query.subir ? "Su vídeo se está subiendo, estará listo en un par de minutos" : null
     return getAsignaturaCodigo(req.params.asignatura)
     .then((asign) =>{
         res.render('asignatura',
             {
                 contextPath: app.contextPath,
                 asignatura: asign,
-                formPath: "" + req.baseUrl + "/" + asign.codigo + "/comentario"
+                formPath: "" + req.baseUrl + "/" + asign.codigo + "/comentario",
+                formVideoPath: "" + req.baseUrl + "/subirVideo/" + asign.codigo,
+                subir: subir
             });
         }).catch(function (error) {
             console.log("Error:", error);

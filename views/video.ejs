@@ -1,4 +1,4 @@
-
+<script class ="code" src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 <div class="content">
     <h2><%=video.titulo%></h2>
     <h3 class="p_hr">Información</h3>
@@ -8,10 +8,6 @@
             <tr>
             <th scope="row" class="noBorde">Título</th>
             <td class="noBorde"><%=video.titulo%></td>
-            </tr>
-            <tr>
-            <th scope="row" class="noBorde">Duración</th>
-            <td class="noBorde"><%=video.duracion%> minutos</td>
             </tr>
             <tr>
             <th scope="row" class="noBorde">Sinopsis</th>
@@ -29,10 +25,8 @@
     <h3 class="p_hr">Vídeo</h3>
     <hr>
     <div class="container text-center"> 
-        <p><%=video.titulo%></p>   
-        <a href="<%=videoPath%>/<%=video.identificador%>">
-        <img src="<%=contextPath%>/images/videos/<%=video.urlImagen%>"  class="img-responsive img-thumbnail" alt="Image">
-        </a>
+        <p><%=video.titulo%></p>
+        <video style="width: 100%" data-dashjs-player autoplay src="<%=contextPath%>/videos/<%=video.urlVideo%>" controls/>
         <p><span style="color:red;" class="text-right glyphicon glyphicon-thumbs-down"><%=video.dislikes%></span><span style="color:green;" class="glyphicon glyphicon-thumbs-up"><%=video.likes%></span></p>
     </div><br>
     <h3 class="p_hr">Comentarios</h3>
